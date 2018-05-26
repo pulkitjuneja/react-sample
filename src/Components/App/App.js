@@ -8,14 +8,26 @@ class App extends Component {
     super(props);
     this.state = {
       movie: {
-        title: 'Default',
-        description: 'Some default bullshit.'
+        title: '',
+        description: ''
       }
     }; 
   }
+
+  componentDidMount () {
+    services.getFirstMovie()
+      .then((response) => {
+        this.setState({
+          movie: {
+            title: response.data.title,
+            description: response.data.description
+          }
+        });
+      });
+  }
   
   onClicked = () => () => {
-    services.getMovie()
+    services.getRandomMovie()
       .then((response) => {
         this.setState({
           movie: {
@@ -27,7 +39,7 @@ class App extends Component {
   }
   render () {
     return (
-      <div>
+      <div className='AppContainer'>
         <MovieDetails movie={this.state.movie} />
         <Button title='Fetch' onClick={this.onClicked()} />
       </div>
