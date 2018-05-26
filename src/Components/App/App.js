@@ -1,5 +1,6 @@
 import Button from '../Button';
 import MovieDetails from '../MovieDetails';
+import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import * as services from '../../Services/api';
 
@@ -37,14 +38,28 @@ class App extends Component {
         });
       });
   }
+  redirect = (description) => () => {
+    this.props.history.push({
+      pathname: '/details',
+      state: {
+        description
+      }
+    });
+  }
+  
   render () {
     return (
       <div className='AppContainer'>
         <MovieDetails movie={this.state.movie} />
         <Button title='Fetch' onClick={this.onClicked()} />
+        <Button title='Details' onClick={this.redirect(this.state.movie.description)} />
       </div>
     );
   }
 }
+
+App.propTypes = {
+  history: PropTypes.object
+};
 
 export default App;
