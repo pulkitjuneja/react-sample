@@ -1,18 +1,35 @@
-import logo from '../../logo.svg';
+import Button from '../Button';
+import MovieDetails from '../MovieDetails';
 import React, {Component} from 'react';
-import './App.css';
+import * as services from '../../Services/api';
 
 class App extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      movie: {
+        title: 'Default',
+        description: 'Some default bullshit.'
+      }
+    }; 
+  }
+  
+  onClicked = () => () => {
+    services.getMovie()
+      .then((response) => {
+        this.setState({
+          movie: {
+            title: response.data.title,
+            description: response.data.description
+          }
+        });
+      });
+  }
   render () {
     return (
-      <div className='App'>
-        <header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
-          <h1 className='App-title'>Welcome to React</h1>
-        </header>
-        <p className='App-intro'>
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <MovieDetails movie={this.state.movie} />
+        <Button title='Fetch' onClick={this.onClicked()} />
       </div>
     );
   }
